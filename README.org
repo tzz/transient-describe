@@ -1,0 +1,49 @@
+#+TITLE: transient-describe — self-describing, auto-packed transient menus
+
+Give a prefix the class =transient-describe-prefix=.  Its suffixes then
+need no description (the command name is used), every suffix shows the
+command's real key binding as a hint, and the columns of each
+=transient-columns= group are re-flowed into as few rows as fit the
+window.  Write the prefix as one outer group holding all the columns and
+let the library decide where the rows break.
+
+#+begin_src emacs-lisp
+(transient-define-prefix my-menu ()
+  "All of it"
+  :class transient-describe-prefix
+  [["Files"
+    ("g" consult-git-grep)          ; shows: consult-git-grep (<f2>)
+    ("d" "grep the tree" deadgrep)  ; shows: grep the tree (<f3>)
+    ("f f" find-file)]              ; shows: find-file (C-x C-f)
+   ["Buffer" ...]
+   ["Toggles" ...]])
+#+end_src
+
+* Features
+
+- Key hints: the shortest key bound to the command in the buffer the
+  transient was invoked from, computed at display time.
+- Packing: =transient-describe-pack-columns= and
+  =transient-describe-pack-order= control how columns share rows.
+- Duplicate-key check for every prefix at definition and first use;
+  =M-x transient-describe-check-all-duplicates= audits everything.
+- Registration: packages add commands to a named column without
+  editing the menu, with =transient-describe-register= or the
+  =:transient= keyword this library adds to =use-package=:
+
+  #+begin_src emacs-lisp
+  (use-package magit
+    :transient "Git"
+    :bind (("C-x g" . magit-status)))
+  #+end_src
+
+  Per-mode context menus work the same way with
+  =transient-describe-register-mode= and =(:mode MODE "Column")=.
+- =transient-describe-global-set-key= binds a key and registers the
+  command in one step.
+
+See the Commentary in =transient-describe.el= for the full account.
+
+* Requirements
+
+Emacs 28.1 or newer, transient 0.5 or newer.
