@@ -48,6 +48,10 @@ See the Commentary in =transient-describe.el= for the full account.
 
 Emacs 28.1 or newer, transient 0.5 or newer.
 
+* License
+
+Apache License 2.0; see =LICENSE=.
+
 * Authorship
 
 This package was written with substantial assistance from Claude
